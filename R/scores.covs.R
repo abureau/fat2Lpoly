@@ -86,7 +86,7 @@
 
 # modifié par Jordie le 22 août pour enlever des arguments superflus.
 
-scores.covs=function(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,ind.catl,ind.cat,contingency.file,descrip.file)
+scores.covs=function(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,lc=NULL,alpha.vec=rep(0,n.levels-1))
 {
 ###################### Définition des arguments #####################################################################################
 # subject.ids: vecteur des id de chaque sujet
@@ -94,6 +94,14 @@ scores.covs=function(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il
 # y: vecteur de type "factor" donnant le statut, qui est la combinaison des 6e colonne (endophénotype) et 7e colonne (phénotype) des fichiers ped
 # n.levels : nombre de catégories du statut (y)
 # ibd.dat : data frame des données d'IBD combinées
+# n.loc : nombre de locus
+# xp : matrice de design pour le calcul du score
+# xp.loc : Liste du vecteur de locus impliqués dans chaque paramètre
+# xl : matrice de design pour le calcul des covariances (contient seulement les effets principaux des locus)
+# il : indices après conversion des termes de produits en indices des variables dans le produit
+# ind.par : donne les indices des locus pour la catégorie à laquelle chaque terme appartient
+# lc : locus sur lequel on conditionne le test du score
+# alpha.vec : vecteur de log rapports de cote entre phénotype et compte d'allèle au locus précisé par lc, un élément pour chaque catégorie k vs. les autres catégories
 # autres paramètres à commenter..............
 #####################################################################################################################################
 
@@ -134,24 +142,42 @@ for(i in 1:nb.fam)
     cat(table(y[indices.y]),"\n",file=descrip.file,append=TRUE)
     cat("\n",file=descrip.file,append=TRUE)
    }
-
+  # Si plus d'une catégorie de y est représentée dans la famille
   if(length(unique(y[indices.y]))>1)
-   { 
+   {
+    # nombre de sujets dans la famille
+    ni = sum(indices.y)
+ 
     # dans le cas où l'analyse est faite avec un sous-ensemble des sujets de la famille,
     # limiter les données d'IBD à ce sous-ensemble de sujets.
     sub.tmp=subject.ids[indices.y]
     indices.ibd=fam.id.ibd==fam.id.u[i] & l1%in%sub.tmp & l2%in%sub.tmp
   
-    ibd.terms.mat[i,,,]=ibd.terms(y[indices.y],subject.ids[indices.y],l1[indices.ibd],l2[indices.ibd],array(pim[indices.ibd,],c(sum(indices.ibd),ncol(pim))))
-    
-	sigma2.mat[i,,,]=cov.score.poly(array(xl[indices.y,,],c(sum(indices.y),dim(xl)[2],dim(xl)[3])),y[indices.y],subject.ids[indices.y],l1[indices.ibd],l2[indices.ibd],array(pim[indices.ibd,],c(sum(indices.ibd),ncol(pim))),x.loc=xibd.loc)
+	  sigma2.mat[i,,,]=cov.score.poly(array(xl[indices.y,,],c(ni,dim(xl)[2],dim(xl)[3])),y[indices.y],subject.ids[indices.y],l1[indices.ibd],l2[indices.ibd],array(pim[indices.ibd,],c(sum(indices.ibd),ncol(pim))),x.loc=xibd.loc)
 	  # Les covariances entre scores pour le même locus dans différente fonctions de régression impliquent des estimations de la variance des scores
 	  # On les copie de sigma2.mat dans les éléments appropriés de sigma2i.mat
     # Appel de la version 4
-      sigma2i.mat[i,,,]=cov.score.interfunction(xibd.loc,ind.catl,array(sigma2.mat[i,,,],dim(sigma2.mat)[2:4]))
-      scores.mat[i,]=score.poly(array(xp[indices.y,,],c(sum(indices.y),dim(xp)[2],dim(xp)[3])),y[indices.y])
+    sigma2i.mat[i,,,]=cov.score.interfunction(xibd.loc,ind.catl,array(sigma2.mat[i,,,],dim(sigma2.mat)[2:4]))
+    
+    # Si on ne conditionne pas sur un locus  
+    if (is.null(lc))
+      {
+      ibd.terms.mat[i,,,]=ibd.terms(y[indices.y],subject.ids[indices.y],l1[indices.ibd],l2[indices.ibd],array(pim[indices.ibd,],c(sum(indices.ibd),ncol(pim))))
+      scores.mat[i,]=score.poly(array(xp[indices.y,,],c(ni,dim(xp)[2],dim(xp)[3])),y[indices.y])
+      }
+    # Sinon on conditionne sur un locus en pondérant
+    else
+      {
+      if (!(lc %in% 1:dim(xl)[2])) stop("The index lc does not correspond to a valid locus index in",1:dim(xl)[2])
+      if (length(alpha.vec)!=dim(xl)[3]) stop("The number of alpha coefficients for the computation of weights does not equal the 3rd dimension of xl (",dim(xl)[3],")")
+      # Calcul des poids pour la famille
+      # On suppose que la matrice de design pour le niveau 1 contient le locus lc
+      w = calcule.poids(array(xl[indices.y,,],c(ni,dim(xl)[2],dim(xl)[3])),y[indices.y],ind.par,rep.par,alpha.vec,lc,klc=1)      
+      ibd.terms.mat[i,,,]=ibd.terms.w(y[indices.y],subject.ids[indices.y],l1[indices.ibd],l2[indices.ibd],array(pim[indices.ibd,],c(sum(indices.ibd),ncol(pim))),w)
+      scores.mat[i,]=score.poly.w(array(xp[indices.y,,],c(ni,dim(xp)[2],dim(xp)[3])),y[indices.y],w)      
+      }
     }
-  # s'il y a une seule catégorie représentée dans la famille, les programmes ne s'appliquent pas 
+  # s'il y a une seule catégorie de y représentée dans la famille, les programmes ne s'appliquent pas 
   # et on donne une valeur de 0 au score et une valeur très petite à ibd.terms.mat et sigma2.mat.
   else 
    {
