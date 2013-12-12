@@ -9,7 +9,7 @@ Same as \code{fat2Lpoly} except that the first four arguments of \code{fat2Lpoly
 }
 \usage{
 fat2Lpoly.withinR(ped.x.all, snp.names.mat, ibd.loci = NULL, contingency.file = FALSE, 
-                  design.constraint, par.constrained, constraints)
+                  design.constraint, par.constrained, constraints,lc=1,alpha.vec=c(0,0,0))
 }
 \arguments{
   \item{ped.x.all}{
@@ -34,6 +34,11 @@ function building the design matrices WITHIN each category, for constraints spec
 Optional matrix of dimensions (\code{n.levels}-1) x nc specifying the nc linear constraints BETWEEN the logistic models for different levels of the response variable, involving the parameters specified in \code{par.constrained}, one constraint per column.  A 0 means that the corresponding parameter is not involved in the constraint.
   This functionality is not yet implemented.
 }
+  \item{lc}{
+  numerical identifier of the SNP (locus) on which to condition when testing model terms. Default to 1.
+  }
+  \item{alpha.vec}
+  vector of length \code{n.levels}-1 of the coefficients of the polytomous logistic model of association beween the phenotype and the conditionning SNP. Defaults to a vector of zeros.
 }
 \details{
 File "descriptive_statistics'date_and_time'.txt" (will be created if contingency.file='TRUE'): For each tested SNP, it shows contingency tables of the subjects in the 2 or 4 different categories, first for all families together and then for each individual family.
