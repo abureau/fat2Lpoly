@@ -17,7 +17,7 @@
 
 #fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=NULL,alpha.vec=rep(0,n.levels-1))
 #fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=1,alpha.vec=c(-0.2,0.3,0.1))
-fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=1,alpha.vec=c(0,0,0))
+fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=NULL,alpha.vec=c(0,0,0))
 {
 ped=ped.x.all$ped
 x.all=ped.x.all$x.all

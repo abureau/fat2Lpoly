@@ -9,7 +9,7 @@ Same as \code{fat2Lpoly} except that the first four arguments of \code{fat2Lpoly
 }
 \usage{
 fat2Lpoly.withinR(ped.x.all, snp.names.mat, ibd.loci = NULL, contingency.file = FALSE, 
-                  design.constraint, par.constrained, constraints,lc=1,alpha.vec=c(0,0,0))
+                  design.constraint, par.constrained, constraints,lc=NULL,alpha.vec=c(0,0,0))
 }
 \arguments{
   \item{ped.x.all}{
@@ -35,7 +35,7 @@ Optional matrix of dimensions (\code{n.levels}-1) x nc specifying the nc linear 
   This functionality is not yet implemented.
 }
   \item{lc}{
-  numerical identifier of the SNP (locus) on which to condition when testing model terms. Default to 1.
+  numerical identifier of the SNP (locus) on which to condition when testing model terms. Defaults to NULL, or no conditioning.
   }
   \item{alpha.vec}
   vector of length \code{n.levels}-1 of the coefficients of the polytomous logistic model of association beween the phenotype and the conditionning SNP. Defaults to a vector of zeros.
