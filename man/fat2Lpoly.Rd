@@ -5,7 +5,7 @@
 Two-locus Family-based Association Test with Polytomous Outcome
 }
 \description{
-For a list of SNP pairs, performs 2-locus family-based association tests defined by some design constraints (see [1]).  The tested SNP is the second one of each pair, while the first one is considered the conditioning SNP. The function may also perform one-locus tests if individual SNPs are specified instead of SNP pairs.
+For a list of SNP pairs, performs family-based association tests with a polytomous outcome under 2-locus and 1-locus models as described in [1]. Various functions \code{design.constraint} to create design matrices are provided in this package.  The tested SNP is the second one of each pair, while the first one is considered the conditioning SNP. The function may also perform one-locus tests if individual SNPs are specified instead of SNP pairs.
 }
 \usage{
 fat2Lpoly(pedfilenames, datfilenames, freq.data, ibdfilenames = NULL, 
@@ -82,7 +82,7 @@ affection name extracted from second line of the data file(s)
 }
 }
 \references{
-1. paper reference
+1. Bureau A., Croteau J., Chagnon, Y.C., Roy, M.-A. and Maziade, M. Extension of the Generalized Disequilibrium Test to polytomous phenotypes and two locus models.
 
 2. http://www.sph.umich.edu/csg/abecasis/Merlin/tour/input_files.html
 }

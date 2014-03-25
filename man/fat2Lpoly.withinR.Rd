@@ -53,6 +53,9 @@ list of length 'nrow(\code{snp.names.mat})', each element of which contains the 
 (same matrix as provided as argument) matrix of one or two columns giving the names of the SNPs (if one column matrix) or pairs of SNPs (if two columns matrix) to be analyzed.  These SNPs represent all or part of the SNPs in the data files \code{datfilenames}.
 }
 }
+\references{
+Bureau A., Croteau J., Chagnon, Y.C., Roy, M.-A. and Maziade, M. Extension of the Generalized Disequilibrium Test to polytomous phenotypes and two locus models.
+}
 \author{
 Alexandre Bureau and Jordie Croteau
 }

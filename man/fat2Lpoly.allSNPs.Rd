@@ -2,32 +2,21 @@
 \alias{fat2Lpoly.allSNPs}
 \docType{data}
 \title{
-sample output of the function \code{fat2Lpoly.withinR}
+Example results output by the function \code{fat2Lpoly.withinR}
 }
 \description{
-This example output of the function \code{fat2Lpoly.withinR} is provided to test the function \code{get.scores.pvalues} by executing the example code in the \code{get.scores.pvalues} documentation.
+This list is an example of output from the function \code{fat2Lpoly.withinR}. It is provided to test the function \code{get.scores.pvalues} by executing the example code in the \code{get.scores.pvalues} documentation.
 }
 \usage{data(fat2Lpoly.allSNPs)}
 \format{
-  The format is:
-List of 2
- $ scores.covs.all.SNPs:List of 5
-  ..$ :List of 2
-  .. ..$ scores.mat: num [1:100, 1:5] 0.5 0 0 0 0.25 ...
-  .. ..$ cov.mat   : num [1:100, 1:5, 1:5] 0.128 0 0 0 0.159 ...
-  ..$ :List of 2
-  .. ..$ scores.mat: num [1:100, 1:5] 0.5 0 0 0 0.25 ...
-  .. ..$ cov.mat   : num [1:100, 1:5, 1:5] 0.128 0 0 0 0.159 ...
-  ..$ :List of 2
-  .. ..$ scores.mat: num [1:100, 1:5] 0.5 0 0 0 0.25 ...
-  .. ..$ cov.mat   : num [1:100, 1:5, 1:5] 0.128 0 0 0 0.159 ...
-  ..$ :List of 2
-  .. ..$ scores.mat: num [1:100, 1:5] 0.5 0 0 0 0.25 ...
-  .. ..$ cov.mat   : num [1:100, 1:5, 1:5] 0.128 0 0 0 0.159 ...
-  ..$ :List of 2
-  .. ..$ scores.mat: num [1:100, 1:5] 0.5 0 0 0 0.25 ...
-  .. ..$ cov.mat   : num [1:100, 1:5, 1:5] 0.128 0 0 0 0.159 ...
- $ snp.names.mat       : chr [1:5, 1:2] "snp4.loc1" "snp4.loc1" "snp4.loc1" "snp4.loc1" ...
+A list of two objects:
+
+  \item{scores.covs.all.SNPs}{
+list of length 'nrow(\code{snp.names.mat})', each element of which contains the estimates of the scores and covariances of all the families.
+}
+  \item{snp.names.mat}{
+(same matrix as provided as argument) matrix of one or two columns giving the names of the SNPs (if one column matrix) or pairs of SNPs (if two columns matrix) to be analyzed.  These SNPs represent all or part of the SNPs in the data files \code{datfilenames}.
+}
 }
 \examples{
 data(fat2Lpoly.allSNPs)
