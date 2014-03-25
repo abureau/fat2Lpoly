@@ -10,7 +10,7 @@ This list is an example of output from the function \code{read.merlin.files}. It
 \usage{data(ped.x.all)}
 \format{
 A list of six objects:
-
+  \describe{
   \item{ped}{
 data frame with columns fam.id, subject.ids, endophenotype and phenotype (in the given order)
 }
@@ -31,6 +31,7 @@ affection name extracted from second line of the data file(s)
 }
   \item{ibdfilenames}{
 (same object as provided as argument) vector of 1 or 2 (the number of loci involved in the \code{design} function) character strings giving the names of the Merlin format ibd files corresponding to the pedigree files.
+}
 }
 }
 \examples{

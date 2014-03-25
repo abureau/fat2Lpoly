@@ -1,0 +1,1 @@
+export(design.1locus,design.endo2disease,design.full,fat2Lpoly,fat2Lpoly.withinR,get.scores.pvalues,read.merlin.files)
