@@ -28,8 +28,7 @@ Maintainer: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca>
 \keyword{ package }
 
 \examples{
-path.data=paste(.libPaths(),"/fat2Lpoly/extdata/",sep="")
-if(length(path.data)>1) path.data=path.data[length(path.data)]
+path.data=paste(.libPaths()[which(unlist(lapply(.libPaths(),function(x) length(grep("fat2Lpoly",dir(x)))))>0)],"/fat2Lpoly/extdata/",sep="")
 
 snps.anal=c("snp2.loc2","snp4.loc2","snp5.loc2","snp6.loc2","snp8.loc2")
 microsat.names.loc2=c("2_2_mrk:","2_4_mrk:","2_5_mrk:","2_6_mrk:","2_8_mrk:")
