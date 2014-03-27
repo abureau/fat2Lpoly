@@ -1,1 +1,1 @@
-export(design.1locus,design.endo2disease,design.full,fat2Lpoly,fat2Lpoly.withinR,get.scores.pvalues,read.merlin.files)
+export(design.1locus,design.dichotomique,design.endo2disease,design.full,fat2Lpoly,fat2Lpoly.withinR,get.scores.pvalues,read.merlin.files)
