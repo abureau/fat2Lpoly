@@ -37,8 +37,9 @@ Optional matrix of dimensions (\code{n.levels}-1) x nc specifying the nc linear 
   \item{lc}{
   numerical identifier of the SNP (locus) on which to condition when testing model terms. Defaults to NULL, or no conditioning.
   }
-  \item{alpha.vec}
+  \item{alpha.vec}{
   vector of length \code{n.levels}-1 of the coefficients of the polytomous logistic model of association beween the phenotype and the conditionning SNP. Defaults to a vector of zeros.
+}
 }
 \details{
 File "descriptive_statistics'date_and_time'.txt" (will be created if contingency.file='TRUE'): For each tested SNP, it shows contingency tables of the subjects in the 2 or 4 different categories, first for all families together and then for each individual family.
@@ -65,10 +66,8 @@ Alexandre Bureau and Jordie Croteau
 \examples{
 data(ped.x.all)
 
-snp.names.mat=cbind(rep("snp4.loc1",5),c("snp2.loc2","snp4.loc2","snp5.loc2",
-                                         "snp6.loc2","snp8.loc2"))	
-microsat.names.mat=cbind(rep("1_4_mrk:",5),c("2_2_mrk:","2_4_mrk:","2_5_mrk:",
-                                             "2_6_mrk:","2_8_mrk:"))	
+snp.names.mat=cbind(rep("snp4.loc1",2),c("snp3.loc2","snp4.loc2"))	
+microsat.names.mat=cbind(rep("1_4_mrk:",2),c("2_3_mrk:","2_4_mrk:"))	
 fat2Lpoly.allSNPs=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci=
                                     microsat.names.mat,contingency.file=TRUE,
 									design.constraint=design.endo2disease)

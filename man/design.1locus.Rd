@@ -61,12 +61,12 @@ function(x,par.constrained,constraints)
 # Matrice avec tous les effets
 
 x.e <- list(x,x,x)
-# Liste des locus impliqués dans chaque effet
+# Liste des locus impliques dans chaque effet
 x.loc.e <- list("1","1","1")
 
 # Matrice avec les effets principaux seulement
 x.l <- x.e
-# Liste des locus impliqués dans chaque effet
+# Liste des locus impliques dans chaque effet
 x.loc.l <- x.loc.e
 
 # Liste des sorties

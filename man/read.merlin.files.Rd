@@ -67,7 +67,7 @@ Alexandre Bureau and Jordie Croteau
 \code{\link{fat2Lpoly.withinR}}
 }
 \examples{
-path.data=paste(.libPaths(),"/fat2Lpoly/extdata/",sep="")
+path.data=paste(.libPaths()[which(unlist(lapply(.libPaths(),function(x) length(grep("fat2Lpoly",dir(x)))))>0)],"/fat2Lpoly/extdata/",sep="")
 if(length(path.data)>1) path.data=path.data[length(path.data)]
 
 input.data=read.merlin.files(pedfilenames=
