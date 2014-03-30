@@ -48,30 +48,4 @@ Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 \seealso{
 \code{\link{fat2Lpoly}, \link{design.endo2disease}}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function(x,par.constrained,constraints)
-{
-
-# Matrice avec tous les effets
-x1 <- x2 <- x3 <- cbind(x[,1],x[,2],x[,1]*x[,2])
-x.e <- list(x1,x2,x3)
-# Liste des locus impliques dans chaque effet
-x.loc.e <- list("1","2","12","1","2","12","1","2","12")
-
-# Pour ce modele, x.l est egal a x.e  et  x.loc.l a x.loc.e
-x.l <- x.e
-# Liste des locus impliques dans chaque effet
-x.loc.l <- x.loc.e
-
-# Liste des sorties
-li <- list(x.e=x.e,x.loc.e=x.loc.e,x.l=x.l,x.loc.l=x.loc.l)
-if (!missing(constraints)) li <- list(li,par.constrained=par.constrained,constraints=constraints)
-attributes(li)$n.levels <- 4
-li
-  }
-}

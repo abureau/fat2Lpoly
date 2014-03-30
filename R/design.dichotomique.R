@@ -10,7 +10,7 @@
 
 # modifié par Jordie le 22 août dans le but d'ajouter n.levels (nombre de catégories de la variable réponse) comme attribut de la fonction
 
-design.dichotomique <- function(x,par.constrained,constraints)
+design.dichotomous <- function(x,...)
 {
 
 # Matrice avec tous les effets
@@ -26,7 +26,6 @@ x.loc.l <- x.loc.e
 
 # Liste des sorties
 li <- list(x.e=x.e,x.loc.e=x.loc.e,x.l=x.l,x.loc.l=x.loc.l)
-if (!missing(constraints)) li <- list(li,par.constrained=par.constrained,constraints=constraints)
 attributes(li)$n.levels <- 2
 li
 }
