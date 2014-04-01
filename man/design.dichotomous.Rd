@@ -15,7 +15,7 @@ design.dichotomous(x,...)
   \item{x}{ A 2-column matrix of numeric values representing genotypes of biallelic markers, with one column per marker and one row per subject. The two homozygous genotypes must 
 be coded 0 and 1, and the heterozygous genotype value depends on the genetic model: 0 (recessive), 1/2 (allelic) or 1 (dominant).
 }
-  \item{...} { Additional arguments will be ignored, but must be allowed for compatibility with other design functions.
+  \item{...}{ Additional arguments will be ignored, but must be allowed for compatibility with other design functions.
 }
 }
 \details{
