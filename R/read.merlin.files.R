@@ -21,19 +21,68 @@ read.merlin.files=function(pedfilenames,datfilenames,freq.data,ibdfilenames=NULL
 # Tous ces fichiers doivent être en format Merlin (voir http://www.sph.umich.edu/csg/abecasis/Merlin/tour/input_files.html pour la description détaillée de ce format)
 #####################################################################################################################################
 
+############### lecture des fichiers datfile pour obtenir les noms de SNPs et de phénotype #######################
+dat1=read.table(datfilenames[1],as.is=TRUE)
+if(dat1[1,1]!="A") stop(paste("The first line of",datfilenames[1],"should be starting by 'A'."))
+
+# si 2 noms d'affection status sont fournis, on suppose que le 1er est l'endophénotype et le 2e, le phénotype.
+if(sum(dat1[,1]=="A")==2){ 
+nb.pheno=2
+pheno.name=dat1[2,2]
+endo.name=dat1[1,2]
+cat("\n")
+cat("Y1 data extracted from input files:   ",endo.name,"\n")
+cat("Y2 data extracted from input files:   ",pheno.name,"\n")
+cat("\n")
+if(!all(dat1[3:nrow(dat1),1]=="M")) stop(paste("Lines number 3 to",nrow(dat1),"of",datfilenames[1],"should all be starting by 'M'."))
+}
+# si seulement 1 nom d'affection status est fourni, on met pheno.name=NULL et on travaille avec endo.name (bien que ce dernier puisse représenter un phenotype (pas endo))
+else{
+nb.pheno=1
+endo.name=dat1[1,2]
+pheno.name=NULL
+cat("\n")
+cat("Analysis will be for dichotomous phenotype:  ",endo.name,"\n")
+cat("\n")
+if(!all(dat1[2:nrow(dat1),1]=="M")) stop(paste("Lines number 2 to",nrow(dat1),"of",datfilenames[1],"should all be starting by 'M'."))
+}
+
+snp.names.dat=dat1[dat1[,1]=="M",2]
+
+n.loc=length(pedfilenames)
+if(n.loc>1)
+ {
+  for(loc.num in 2:n.loc)
+   {
+    dat.tmp=read.table(datfilenames[loc.num],as.is=TRUE)
+	if(dat.tmp[1,1]!="A") stop(paste("The first line of",datfilenames[loc.num],"should be starting by 'A'."))
+	if(nb.pheno==2){ if(!all(dat.tmp[3:nrow(dat.tmp),1]=="M")) stop(paste("Lines number 3 to",nrow(dat.tmp),"of",datfilenames[loc.num],"should all be starting by 'M'."))}
+    else{ if(!all(dat.tmp[2:nrow(dat.tmp),1]=="M")) stop(paste("Lines number 2 to",nrow(dat.tmp),"of",datfilenames[loc.num],"should all be starting by 'M'."))}
+    snp.names.dat=c(snp.names.dat,dat.tmp[dat.tmp[,1]=="M",2])
+   }
+ }
+################################################################################################################################
+
+
 # extraction des fam.id, subject.ids, y1 et y2, à partir du premier fichier ped.
 ped1.tmp=read.table(pedfilenames[1],header=FALSE,as.is=TRUE)
 if(any(apply(ped1.tmp,2,is.character))) stop(paste(pedfilenames[1],"contains letters in some fields.  All fields must be numeric."))
 fam.id=ped1.tmp[,1]
 subject.ids=ped1.tmp[,2]
+if(nb.pheno==2){ # 2 affection status fournis
 y1=ped1.tmp[,6]
 y2=ped1.tmp[,7]
 y1[is.na(y1)]=0
 y2[is.na(y2)]=0
+}
+else{ # 1 seul affection status fourni
+y1=ped1.tmp[,6]
+y1[is.na(y1)]=0
+}
 
 ################ extraction des génotypes de tous les locus #####################################
-ped=data.frame(fam.id,subject.ids,ped1.tmp[,3:4],y1,y2,ped1.tmp[,8:ncol(ped1.tmp)])
-n.loc=length(pedfilenames)
+if(!is.null(pheno.name)) ped=data.frame(fam.id,subject.ids,ped1.tmp[,3:4],y1,y2,ped1.tmp[,8:ncol(ped1.tmp)])
+else ped=data.frame(fam.id,subject.ids,ped1.tmp[,3:4],y1,ped1.tmp[,7:ncol(ped1.tmp)])
 
 if(n.loc>1)
  {
@@ -41,7 +90,7 @@ if(n.loc>1)
    {
     ped.tmp=read.table(pedfilenames[loc.num],header=FALSE,as.is=TRUE)
 	if(any(apply(ped.tmp,2,is.character))) stop(paste(pedfilenames[loc.num],"contains letters in some fields.  All fields must be numeric."))
-    ped.tmp=ped.tmp[,c(1,2,8:ncol(ped.tmp))]
+	ped.tmp=ped.tmp[,c(1,2,(6+nb.pheno):ncol(ped.tmp))] 
 	colnames(ped.tmp)[1:2]=c("fam.id","subject.ids")
 	ped=merge(ped,ped.tmp,by=c("fam.id","subject.ids"),all.x=FALSE,all.y=FALSE,sort=FALSE)
    }
@@ -52,31 +101,6 @@ ped=ped[,-(3:4)]
 if(nrow(ped)<nrow(ped1.tmp)) warning(paste("Subjects from 1 or more ped files differ from those of other ped files. Only subjects found in the",n.loc,"ped files at the same time are kept for analysis."))
 ##################################################################################################
  
-############### lecture des fichiers datfile pour obtenir les noms de SNPs #######################
-dat1=read.table(datfilenames[1],as.is=TRUE)
-if(dat1[2,1]!="A"|dat1[1,1]!="A") stop(paste("The first and second lines of",datfilenames[1],"should be starting by 'A'."))
-if(!all(dat1[3:nrow(dat1),1]=="M")) stop(paste("Lines number 3 to",nrow(dat1),"of",datfilenames[1],"should all be starting by 'M'."))
-
-pheno.name=dat1[2,2]
-endo.name=dat1[1,2]
-cat("\n")
-cat("Y1 data extracted from input files:   ",endo.name,"\n")
-cat("Y2 data extracted from input files:   ",pheno.name,"\n")
-cat("\n")
-
-snp.names.dat=dat1[dat1[,1]=="M",2]
-
-if(n.loc>1)
- {
-  for(loc.num in 2:n.loc)
-   {
-    dat.tmp=read.table(datfilenames[loc.num],as.is=TRUE)
-	if(dat.tmp[2,1]!="A"|dat.tmp[1,1]!="A") stop(paste("The first and second lines of",datfilenames[loc.num],"should be starting by 'A'."))
-    if(!all(dat.tmp[3:nrow(dat.tmp),1]=="M")) stop(paste("Lines number 3 to",nrow(dat.tmp),"of",datfilenames[loc.num],"should all be starting by 'M'."))
-    snp.names.dat=c(snp.names.dat,dat.tmp[dat.tmp[,1]=="M",2])
-   }
- }
-#################################################################################################
 
 ################################################ obtention des allèles mineures ##########################################################
 if(is.list(freq.data)) MA=unlist(freq.data)
@@ -151,7 +175,7 @@ if(!all(snp.names.freq==snp.names.dat)) stop("SNP names or order in freq files n
 # à partir des fichiers freq.
 for(j in 1:length(MA))
  {
-  genos.tmp=as.vector(ped[,c(3+2*j,4+2*j)])
+  genos.tmp=as.vector(ped[,c(1+nb.pheno+2*j,2+nb.pheno+2*j)])
   if(!all(is.na(genos.tmp)|genos.tmp==0))
    {
     genos.tmp=genos.tmp[!(is.na(genos.tmp)|genos.tmp==0)]
@@ -162,7 +186,7 @@ for(j in 1:length(MA))
 }
 
 # conversion des génotypes en valeurs 0,0.5,1 (mode="allelic")
-x.all=alleles2sums(ped[,5:ncol(ped)],MA.vec=MA,snp.names=snp.names.dat,mode="allelic")
+x.all=alleles2sums(ped[,(3+nb.pheno):ncol(ped)],MA.vec=MA,snp.names=snp.names.dat,mode="allelic")
 
 MA.table=data.frame(snp.names.dat,MA)
 
@@ -170,5 +194,5 @@ MA.table=data.frame(snp.names.dat,MA)
 ibd.dat.list=vector(mode="list",length=n.loc)
 if(!is.null(ibdfilenames)) for(loc.num in 1:n.loc) ibd.dat.list[[loc.num]]=as.data.frame(read.table(ibdfilenames[loc.num],header=TRUE,as.is=TRUE))
 
-list(ped=ped[,1:4],x.all=x.all,MA.table=MA.table,ibd.dat.list=ibd.dat.list,y1.name=endo.name,y2.name=pheno.name,ibdfilenames=ibdfilenames,pere=pere,mere=mere)
+list(ped=ped[,1:(2+nb.pheno)],x.all=x.all,MA.table=MA.table,ibd.dat.list=ibd.dat.list,y1.name=endo.name,y2.name=pheno.name,ibdfilenames=ibdfilenames,pere=pere,mere=mere)
 }                      
