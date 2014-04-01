@@ -16,7 +16,7 @@
 # 4 avril 2013: valeur par défaut des arguments ibdfilenames et ibd.loci fixée à NULL.
 #               Si un de ces 2 arguments prend la valeur NULL, alors la fonction fat2Lpoly.withinR fait le calcul des coefficients de kinship (a priori) au lieu des IBD.
 
-fat2Lpoly=function(pedfilenames,datfilenames,freq.data,ibdfilenames=NULL,snp.names.mat,ibd.loci=NULL,joint.tests=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints)
+fat2Lpoly=function(pedfilenames,datfilenames,freq.data,ibdfilenames=NULL,snp.names.mat,ibd.loci=NULL,joint.tests=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=NULL,alpha=NULL)
 {
 ###################### Définition des arguments #####################################################################################
 # pedfilenames : vecteur des noms de fichiers ped (un fichier par locus).  Les sujets inclus peuvent être un sous-ensemble de ceux 
@@ -40,6 +40,7 @@ fat2Lpoly=function(pedfilenames,datfilenames,freq.data,ibdfilenames=NULL,snp.nam
 # par.constrained : vecteur des indices du paramètre impliqué dans chaque contrainte ENTRE des catégories(longueur nc). Utilisé dans design.polytomous.
 # constraints: matrice (K-1) x nc spécifiant des contraintes entre les paramètres  ENTRE les modèles logistiques
 #              pour différentes catégories de la variable réponse, une contrainte par colonne. Utilisé dans design.polytomous.
+# lc: numerical identifier of the SNP (locus) on which to condition when testing model terms. Defaults to NULL, or no conditioning.
 #####################################################################################################################################
 
 if(is.null(ibd.loci)|is.null(ibdfilenames)) cat("\n","Warning: Either the argument ibd.loci or ibdfilenames was not specified. The kinship coefficients (multiplied by 2) will be used in the computation of the score statistics (instead of the expectation of the IBD probabilities).","\n")
@@ -48,7 +49,7 @@ if(is.null(ibd.loci)|is.null(ibdfilenames)) cat("\n","Warning: Either the argume
 ped.x.all=read.merlin.files(pedfilenames,datfilenames,freq.data,ibdfilenames)
 
 # exécution des tests pour les SNPs ou paires de SNPs
-tests.loop=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci,contingency.file,design.constraint,par.constrained,constraints)
+tests.loop=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci,contingency.file,design.constraint,par.constrained,constraints,lc,alpha)
 
 # calcul des scores et valeur-p des différents tests pour tous les SNPs testés
 p.values.scores=get.scores.pvalues(tests.loop,joint.tests)
