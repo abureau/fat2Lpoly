@@ -15,9 +15,7 @@
 
 # 4 avril 2013: ajout du calcul des coefficients de kinship (a priori) au lieu des IBD, dans le cas où cette dernière information n'est pas fournie.
 
-#fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=NULL,alpha.vec=rep(0,n.levels-1))
-#fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=1,alpha.vec=c(-0.2,0.3,0.1))
-fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=NULL,alpha.vec=c(0,0,0))
+fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=NULL,alpha=NULL)
 {
 ped=ped.x.all$ped
 x.all=ped.x.all$x.all
@@ -49,27 +47,31 @@ if(is.null(ibd.loci)|is.null(ibd.dat.list[[1]]))
   for(j in 1:length(fam.u))
    {
     indices=ped[,1]==fam.u[j]
-    ped.tmp=ped[indices,]
-	sujet.tmp=ped.tmp[,2]
-	pere.tmp=pere[indices]
-	mere.tmp=mere[indices]
+	# traiter seulement les familles contenant plus d'un sujet
+	if(sum(indices)>1)
+	 {
+      ped.tmp=ped[indices,]
+	  sujet.tmp=ped.tmp[,2]
+	  pere.tmp=pere[indices]
+	  mere.tmp=mere[indices]
 
-    matk<-2*kinship(sujet.tmp,pere.tmp,mere.tmp)
+      matk<-2*kinship(sujet.tmp,pere.tmp,mere.tmp)
 	
-    pi.tmp=as.numeric(matk[lower.tri(matk)])
-	pi.all=pi.tmp
-	if(n.loc>1) for(i in 1:(n.loc-1)) pi.all=cbind(pi.all,pi.tmp)
+      pi.tmp=as.numeric(matk[lower.tri(matk)])
+	  pi.all=pi.tmp
+	  if(n.loc>1) for(i in 1:(n.loc-1)) pi.all=cbind(pi.all,pi.tmp)
 	
-    paires=outer(sujet.tmp,sujet.tmp,paste)
-    kin.tmp=data.frame(matrix(unlist(strsplit(paires[lower.tri(paires)],split=" ")),ncol=2,byrow=T),pi.all)
+      paires=outer(sujet.tmp,sujet.tmp,paste)
+      kin.tmp=data.frame(matrix(unlist(strsplit(paires[lower.tri(paires)],split=" ")),ncol=2,byrow=T),pi.all)
   
-    kin.diag=as.numeric(diag(matk))
-  	if(n.loc>1) for(i in 1:(n.loc-1)) kin.diag=cbind(kin.diag,as.numeric(diag(matk)))
+      kin.diag=as.numeric(diag(matk))
+  	  if(n.loc>1) for(i in 1:(n.loc-1)) kin.diag=cbind(kin.diag,as.numeric(diag(matk)))
 
-	kin.diag=data.frame(sujet.tmp,sujet.tmp,kin.diag)
-	colnames(kin.diag)=colnames(kin.tmp)
-    kin.tmp=rbind(kin.diag,kin.tmp)
-    ibd.dat=rbind(ibd.dat,cbind(rep(fam.u[j],nrow(kin.tmp)),kin.tmp))
+	  kin.diag=data.frame(sujet.tmp,sujet.tmp,kin.diag)
+	  colnames(kin.diag)=colnames(kin.tmp)
+      kin.tmp=rbind(kin.diag,kin.tmp)
+      ibd.dat=rbind(ibd.dat,cbind(rep(fam.u[j],nrow(kin.tmp)),kin.tmp))
+	 }
    }
   colnames(ibd.dat)[1:3]=c("FAMILY","ID1","ID2")
  }   
@@ -174,15 +176,32 @@ if(any(as.numeric(table(y))==0)){
  else if(categ==4) categ="Y1=1, Y2=1"
  stop(paste("There is no subject with level",categ,"in any of the families (each level must be represented in at least one family)"))
  }
+ 
+# JC, 9 juillet 2013: s'il y a 2 locus, estimer les alphas par régression polytomique GEE de y sur X du locus lc.
+if(!is.null(alpha)&is.null(lc)) stop("If alpha is not null, locus number on which to condition must be given")
+
+if(ncol(x)==2&!is.null(lc)&is.null(alpha))
+ {
+  if (!(lc %in% 1:ncol(x))) stop("The index lc does not correspond to a valid locus index in",1:ncol(x))
+  dat=data.frame(fam.id,subject.ids,y,as.numeric(x[,lc]))
+  colnames(dat)=c("fam","sub","y","geno")
+  un.loc=nomLORgee(y~geno,data=dat,id=fam,repeated=sub,LORstr = "independence")
+  coefs.all=un.loc$coef
+  alpha=coefs.all[c(2,4,6)]
+ }
 }
+
 else if(n.levels==2){
-# enlever les sujets pour lesquels soit y2 est manquant ou un des génotypes des différents locus est manquant.
-ped.filtre=ped[ped$y2!=0&!apply(is.na(x),1,any),]
+cat("Analysis with only one dichotomous phenotype","\n")
+cat("Phenotype used is",ped.x.all$y1.name,"\n")
+
+# enlever les sujets pour lesquels soit le phénotype est manquant ou un des génotypes des différents locus est manquant.
+ped.filtre=ped[ped$y1!=0&!apply(is.na(x),1,any),]
 fam.id=ped.filtre[,1]
 subject.ids=ped.filtre[,2]
-y=factor(3-ped.filtre$y2,levels=1:n.levels)
-dims=c(sum(ped$y2!=0&!apply(is.na(x),1,any)),ncol(x))
-x=array(x[ped$y2!=0&!apply(is.na(x),1,any),],dims)
+y=factor(3-ped.filtre$y1,levels=1:n.levels)
+dims=c(sum(ped$y1!=0&!apply(is.na(x),1,any)),ncol(x))
+x=array(x[ped$y1!=0&!apply(is.na(x),1,any),],dims)
 
 # enlever les familles n'ayant pas plus d'une catégorie représentée et émettre un avertissement s'il y a lieu.
 nb.cat.par.fam=tapply(y,fam.id,function(x) length(unique(x)))
@@ -205,6 +224,18 @@ if(contingency.file)
   cat(c("Y2=2","Y2=1"),"\n",file=descrip.file,append=TRUE)
   cat(table(y),"\n",file=descrip.file,append=TRUE)
   cat("\n",file=descrip.file,append=TRUE)
+ }
+ 
+ # JC, 11 juillet 2013: s'il y a 2 locus, estimer alpha par régression logistique de y sur X du locus lc.
+if(!is.null(alpha)&is.null(lc)) stop("If alpha is not null, locus number on which to condition must be given")
+
+if(ncol(x)==2&!is.null(lc)&is.null(alpha))
+ {
+  if (!(lc %in% 1:ncol(x))) stop("The index lc does not correspond to a valid locus index in",1:ncol(x))
+  dat=data.frame(2-as.numeric(y),as.numeric(x[,lc]))
+  colnames(dat)=c("y","geno")
+  glm.fit=glm(y~geno,data=dat,family=binomial(link = "logit"))
+  alpha=(summary(glm.fit)$coef)[2,1]
  }
 }
 else stop("attribute n.levels of the design.constraint function must be 2 or 4")
@@ -237,7 +268,7 @@ ind.par = tmp2$ind.par
 ind.catl = rep(1:(n.levels-1),lapply(unique(ind.par),length))
 ind.cat = rep(1:(n.levels-1),rep.par)
 
-res[[s]]=scores.covs(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,lc=lc,alpha.vec=alpha.vec)
+res[[s]]=scores.covs(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,lc=lc,alpha.vec=alpha)
 }
 
 list(scores.covs.all.SNPs=res,snp.names.mat=snp.names.mat)
