@@ -9,7 +9,8 @@ Same as \code{fat2Lpoly} except that the first four arguments of \code{fat2Lpoly
 }
 \usage{
 fat2Lpoly.withinR(ped.x.all, snp.names.mat, ibd.loci = NULL, contingency.file = FALSE, 
-                  design.constraint, par.constrained, constraints, lc = NULL, alpha = NULL)
+                  design.constraint, par.constrained, constraints, lc = NULL,
+                  alpha = NULL)
 }
 \arguments{
   \item{ped.x.all}{
@@ -69,8 +70,9 @@ data(ped.x.all)
 snp.names.mat=cbind(rep("snp4.loc1",2),c("snp3.loc2","snp4.loc2"))	
 microsat.names.mat=cbind(rep("1_4_mrk:",2),c("2_3_mrk:","2_4_mrk:"))	
 fat2Lpoly.allSNPs=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci=
-                                    microsat.names.mat,contingency.file=TRUE,
-									design.constraint=design.endo2disease,lc=1)
+                            microsat.names.mat,contingency.file=TRUE,
+							design.constraint=design.endo2disease,
+							lc=1)
 
 joint.tests=list(c(2,5))   
 get.scores.pvalues(fat2Lpoly.allSNPs,joint.tests)
