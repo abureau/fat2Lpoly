@@ -6,7 +6,7 @@ Date: 2014-03-25
 Author: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca> and Jordie Croteau
         <jordie.croteau@crulrg.ulaval.ca>
 Maintainer: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca>
-Depends: kinship2, multgee
+Depends: R (>= 2.10), kinship2, multgee
 Description: Performs family-based association tests with a polytomous outcome under 2-locus and 1-locus models
              defined by some design matrix.  
 License: GPL
