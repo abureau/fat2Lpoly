@@ -12,8 +12,7 @@ read.merlin.files(pedfilenames, datfilenames, freq.data, ibdfilenames = NULL)
 }
 \arguments{
    \item{pedfilenames}{
-vector of 1 or 2 (the number of loci involved in the \code{design} function) character strings giving the names of the pedigree files in Merlin format (see Merlin website [1]). Put the full path of the files if they are not in the current working directory. If the phenotype is polytomous with 4 levels created by all combinations of two dichotomous phenotypic variables \eqn{Y_{1}}{Y[1]} and \eqn{Y_{2}}{Y[2]}, then the sixth and seventh columns of each file are respectively for \eqn{Y_{1}}{Y[1]} (e.g. the endophenotype) and \eqn{Y_{2}}{Y[2]} (e.g. the disease phenotype).
-}
+vector of 1 or 2 (the number of loci involved in the \code{design} function) character strings giving the names of the pedigree files in Merlin format (see Merlin website [1]). Put the full path of the files if they are not in the current working directory. If the phenotype is polytomous with 4 levels created by all combinations of two dichotomous phenotypic variables \eqn{Y_{1}}{Y[1]} and \eqn{Y_{2}}{Y[2]}, then the sixth and seventh columns of each file contain respectively \eqn{Y_{1}}{Y[1]} (e.g. the endophenotype) and \eqn{Y_{2}}{Y[2]} (e.g. the disease phenotype). If the phenotype is dichotomous, then the sixth column of each file contains it.}
   \item{datfilenames}{
 vector of 1 or 2 (the number of loci involved in the \code{design} function) character strings giving the names of the Merlin format data files corresponding to the pedigree files.
 }
@@ -67,22 +66,28 @@ Alexandre Bureau and Jordie Croteau
 \code{\link{fat2Lpoly.withinR}}
 }
 \examples{
-path.data=paste(.libPaths()[which(unlist(lapply(.libPaths(),function(x) length(grep("fat2Lpoly",dir(x)))))>0)],"/fat2Lpoly/extdata/",sep="")
+path.data=paste(.libPaths()[which(unlist(lapply(.libPaths(),
+function(x) length(grep("fat2Lpoly",dir(x)))))>0)],
+"/fat2Lpoly/extdata/",sep="")
 if(length(path.data)>1) path.data=path.data[length(path.data)]
 
 input.data=read.merlin.files(pedfilenames=
-                             paste(path.data,c("loc1.ped","loc2.ped"),sep=""), 
-                             datfilenames=
-							 paste(path.data,c("loc1.dat","loc2.dat"),sep=""), 
-							 freq.data=
-							 paste(path.data,c("loc1.freq","loc2.freq"),sep=""), 
-                             ibdfilenames=
-							 paste(path.data,c("loc1.ibd","loc2.ibd"),sep=""))
+                        paste(path.data,c("loc1.ped","loc2.ped"),sep=""), 
+                        datfilenames=
+						paste(path.data,c("loc1.dat","loc2.dat"),sep=""), 
+						freq.data=
+					    paste(path.data,c("loc1.freq","loc2.freq"),sep=""), 
+                        ibdfilenames=
+					    paste(path.data,c("loc1.ibd","loc2.ibd"),sep=""))
 						 
-input.data2=read.merlin.files(pedfilenames=paste(path.data,"loc2.ped",sep=""), 
-                              datfilenames=paste(path.data,"loc2.dat",sep=""), 
-                              freq.data=paste(path.data,"loc2.freq",sep=""), 
-							  ibdfilenames=paste(path.data,"loc2.ibd",sep=""))						  
+input.data2=read.merlin.files(pedfilenames=
+							  paste(path.data,"loc2.ped",sep=""), 
+                              datfilenames=
+                              paste(path.data,"loc2.dat",sep=""), 
+                              freq.data=
+                              paste(path.data,"loc2.freq",sep=""), 
+							  ibdfilenames=
+							  paste(path.data,"loc2.ibd",sep=""))						  
 }
 
 
