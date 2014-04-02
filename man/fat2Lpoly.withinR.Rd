@@ -67,6 +67,7 @@ Alexandre Bureau and Jordie Croteau
 \examples{
 data(ped.x.all)
 
+\dontrun{
 snp.names.mat=cbind(rep("snp4.loc1",2),c("snp3.loc2","snp4.loc2"))	
 microsat.names.mat=cbind(rep("1_4_mrk:",2),c("2_3_mrk:","2_4_mrk:"))	
 fat2Lpoly.allSNPs=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci=
@@ -76,6 +77,7 @@ fat2Lpoly.allSNPs=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci=
 
 joint.tests=list(c(2,5))   
 get.scores.pvalues(fat2Lpoly.allSNPs,joint.tests)
+}
 }
 
 
