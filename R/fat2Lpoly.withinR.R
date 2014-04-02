@@ -184,8 +184,8 @@ if(ncol(x)==2&!is.null(lc)&is.null(alpha))
  {
   if (!(lc %in% 1:ncol(x))) stop("The index lc does not correspond to a valid locus index in",1:ncol(x))
   dat=data.frame(fam.id,subject.ids,y,as.numeric(x[,lc]))
-  colnames(dat)=c("fam","sub","y","geno")
-  un.loc=nomLORgee(y~geno,data=dat,id=fam,repeated=sub,LORstr = "independence")
+  colnames(dat)=c("fam.id","sub","y","geno")
+  un.loc=nomLORgee(y~geno,data=dat,id=fam.id,repeated=sub,LORstr = "independence")
   coefs.all=un.loc$coef
   alpha=coefs.all[c(2,4,6)]
  }
