@@ -86,7 +86,7 @@
 
 # modifié par Jordie le 22 août pour enlever des arguments superflus.
 
-scores.covs=function(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,lc=NULL,alpha.vec=rep(0,n.levels-1))
+scores.covs=function(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,calcule.poids=calcule.poids.alphafixe,lc=NULL,alpha.vec=rep(0,n.levels-1))
 {
 ###################### Définition des arguments #####################################################################################
 # subject.ids: vecteur des id de chaque sujet
