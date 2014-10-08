@@ -9,8 +9,8 @@ Same as \code{fat2Lpoly} except that the first four arguments of \code{fat2Lpoly
 }
 \usage{
 fat2Lpoly.withinR(ped.x.all, snp.names.mat, ibd.loci = NULL, contingency.file = FALSE, 
-                  design.constraint, par.constrained, constraints, lc = NULL,
-                  alpha = NULL)
+                  design.constraint, par.constrained, constraints, 
+                  pairweights=calcule.poids.alphafixe, lc = NULL, alpha = NULL)
 }
 \arguments{
   \item{ped.x.all}{
@@ -35,6 +35,9 @@ function building the design matrices WITHIN each category, for constraints spec
 Optional matrix of dimensions (\code{n.levels}-1) x nc specifying the nc linear constraints BETWEEN the logistic models for different levels of the response variable, involving the parameters specified in \code{par.constrained}, one constraint per column.  A 0 means that the corresponding parameter is not involved in the constraint.
   This functionality is not yet implemented.
 }
+  \item{pairweights}{
+  	function calculating the weights of the observation pair differences when conditioning on the first SNP in the test of the second SNP in a SNP pair. Default is calcule.poids.alphafixe, implementing the weighting function of equation (6) of reference [1]. An alternative is calcule.poids.Chen, implementing the weighting function of equation (7) of reference [1].
+}
   \item{lc}{
   numerical identifier of the SNP (locus) on which to condition when testing model terms. Defaults to NULL, or no conditioning.
 }
@@ -56,8 +59,7 @@ list of length 'nrow(\code{snp.names.mat})', each element of which contains the 
 }
 }
 \references{
-Bureau A., Croteau J., Chagnon, Y.C., Roy, M.-A. and Maziade, M. Extension of the Generalized Disequilibrium Test to polytomous phenotypes and two locus models.
-}
+Bureau A., Croteau J., Chagnon, Y.C., Roy, M.-A. and Maziade, M. Extension of the Generalized Disequilibrium Test to polytomous phenotypes and two locus models. Frontiers in Genetics, 5: Article 258. }
 \author{
 Alexandre Bureau and Jordie Croteau
 }

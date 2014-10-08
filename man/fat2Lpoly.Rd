@@ -5,13 +5,14 @@
 Two-locus Family-based Association Test with Polytomous Outcome
 }
 \description{
-For a list of SNP pairs, performs family-based association tests with a polytomous outcome under 2-locus and 1-locus models as described in [1]. Various functions \code{design.constraint} to create design matrices are provided in this package.  The tested SNP is the second one of each pair, while the first one is considered the conditioning SNP. The function may also perform one-locus tests if individual SNPs are specified instead of SNP pairs.
+Performs family-based association tests with a polytomous outcome under 2-locus and 1-locus models as described in reference [1]. Various functions \code{design.constraint} to create design matrices are provided in this package. When SNP pairs are specified, the tested SNP is the second one of each pair, while the first one is considered the conditioning SNP. The function may also perform one-locus tests if individual SNPs are specified instead of SNP pairs.
 }
 \usage{
 fat2Lpoly(pedfilenames, datfilenames, freq.data, ibdfilenames = NULL, 
           snp.names.mat, ibd.loci = NULL, joint.tests = NULL, 
 		  contingency.file = FALSE, design.constraint,
-		  par.constrained, constraints, lc = NULL, alpha = NULL)
+		  par.constrained, constraints, pairweights=calcule.poids.alphafixe,
+		  lc = NULL, alpha = NULL)
 }
 \arguments{
   \item{pedfilenames}{
@@ -51,6 +52,9 @@ function building the design matrices WITHIN each category, for constraints spec
 Optional matrix of dimensions (\code{n.levels}-1) x nc specifying the nc linear constraints BETWEEN the logistic models for different levels of the response variable, involving the parameters specified in \code{par.constrained}, one constraint per column.  A 0 means that the corresponding parameter is not involved in the constraint.
   This functionality is not yet implemented.
 }
+  \item{pairweights}{
+  	function calculating the weights of the observation pair differences when conditioning on the first SNP in the test of the second SNP in a SNP pair. Default is calcule.poids.alphafixe, implementing the weighting function of equation (6) of reference [1]. An alternative is calcule.poids.Chen, implementing the weighting function of equation (7) of reference [1].
+}
   \item{lc}{
   numerical identifier of the SNP (locus) on which to condition when testing model terms. Defaults to NULL, or no conditioning.
 }
@@ -64,6 +68,8 @@ All subjects included in the pedigree files must also be found in the IBD files.
 All fields in the pedigree files must be numeric.  No letters allowed, even for family and subject ID's.
 
 Families whose genotyped subjects are all in the same category (phenotype combination), are uninformative and will be excluded.
+
+Conditioning on the first SNP in a SNP pair is implemented by weighting the observation pair differences according to a model of the polytomous outcome as a function of the first SNP genotypes. The function converting the coefficients of this regression model into weights is specified by the argument \code{pairweights}. The default function \code{calcule.poids.alphafixe} provided satisfactory power in simulations described in reference [1].
 
 File "descriptive_statistics'date_and_time'.txt" (will be created if contingency.file='TRUE'): For each tested SNP, it shows contingency tables of the subjects in the 2 or 4 different categories, first for all families together and then for each individual family.
 
@@ -88,8 +94,7 @@ affection name extracted from second line of the data file(s)
 }
 }
 \references{
-1. Bureau A., Croteau J., Chagnon, Y.C., Roy, M.-A. and Maziade, M. Extension of the Generalized Disequilibrium Test to polytomous phenotypes and two locus models.
-
+1. Bureau A., Croteau J., Chagnon, Y.C., Roy, M.-A. and Maziade, M. Extension of the Generalized Disequilibrium Test to polytomous phenotypes and two locus models. Frontiers in Genetics, 5: Article 258. 
 2. http://www.sph.umich.edu/csg/abecasis/Merlin/tour/input_files.html
 }
 \author{
