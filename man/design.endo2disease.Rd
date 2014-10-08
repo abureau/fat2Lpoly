@@ -4,7 +4,7 @@
 Setting-up design matrices for the endophenotype-to-disease model.
 }
 \description{
-This function sets up two lists of three design matrices, one for each linear predictor of the logit of the three outcome levels defined by the combination of two dichotomous traits against the reference level (0,0) under the endophenotype-to-disease model of Bureau et al. The design matrices in the first list contain all terms forming the model, and those in the second list contain all main effect and product terms appearing in the model.
+This function sets up two lists of three design matrices, one for each linear predictor of the logit of the three outcome levels defined by the combination of two dichotomous traits against the reference level (0,0) under the endophenotype-to-disease model of Bureau et al (2014). The design matrices in the first list contain all terms forming the model, and those in the second list contain all main effect and product terms appearing in the model.
 }
 \usage{
 design.endo2disease(x, par.constrained, constraints)
@@ -40,7 +40,8 @@ The design matrices for the above model are constructed by this function.
 \item{x.l }{List of 3 design matrices containing the terms \eqn{X_{1}}{X[1]}, \eqn{X_{2}}{X[2]} and \eqn{X_{1} X_{2}}{X[1] X[2]} appearing in the endophenotype-to-disease model.}
 \item{x.loc.l }{list of character strings containing the indices of the variables in \code{x} involved in each term in the list \code{x.l}}
 }
-
+\references{
+Bureau A., Croteau J., Chagnon, Y.C., Roy, M.-A. and Maziade, M. Extension of the Generalized Disequilibrium Test to polytomous phenotypes and two locus models. Frontiers in Genetics, 5: Article 258. }
 \author{
 Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 }

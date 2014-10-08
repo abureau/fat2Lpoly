@@ -41,6 +41,8 @@ The design matrices for the above model are constructed by this function.
 \item{x.l }{identical to \code{x.e}}
 \item{x.loc.l }{identical to \code{x.l}}
 }
+\references{
+Bureau A., Croteau J., Chagnon, Y.C., Roy, M.-A. and Maziade, M. Extension of the Generalized Disequilibrium Test to polytomous phenotypes and two locus models. Frontiers in Genetics, 5: Article 258. }
 \author{
 Alexandre Bureau <alexandre.bureau@msp.ulaval.ca>
 }
