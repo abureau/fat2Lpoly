@@ -1,6 +1,6 @@
-calcule.poids = function(xl,y,ind.par,rep.par,alpha,lc,klc=1)
+calcule.poids.Chen = function(xl,y,ind.par,rep.par,alpha,lc,klc=1)
 # Fonction pour calculer le poids de chaque paire de sujet pour les tests du score conditionnels à un locus
-# d'après l'équation 2 de Chen et al. (2009)
+# d'après l'équation 7 de Bureau et al. (2014) inspiré de l'équation 2 de Chen et al. (2009)
 ###################### Définition des arguments #####################################################################################
 # xl : matrice de design pour une famille pour le calcul des covariances
 # ind.par : donne les indices des locus pour la catégorie à laquelle chaque terme appartient
