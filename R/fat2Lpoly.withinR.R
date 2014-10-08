@@ -15,7 +15,7 @@
 
 # 4 avril 2013: ajout du calcul des coefficients de kinship (a priori) au lieu des IBD, dans le cas où cette dernière information n'est pas fournie.
 
-fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,calcule.poids=calcule.poids.alphafixe,lc=NULL,alpha=NULL)
+fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,pairweights=calcule.poids.alphafixe,lc=NULL,alpha=NULL)
 {
 ped=ped.x.all$ped
 x.all=ped.x.all$x.all

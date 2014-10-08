@@ -16,7 +16,7 @@
 # 4 avril 2013: valeur par défaut des arguments ibdfilenames et ibd.loci fixée à NULL.
 #               Si un de ces 2 arguments prend la valeur NULL, alors la fonction fat2Lpoly.withinR fait le calcul des coefficients de kinship (a priori) au lieu des IBD.
 
-fat2Lpoly=function(pedfilenames,datfilenames,freq.data,ibdfilenames=NULL,snp.names.mat,ibd.loci=NULL,joint.tests=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,calcule.poids=calcule.poids.alphafixe,lc=NULL,alpha=NULL)
+fat2Lpoly=function(pedfilenames,datfilenames,freq.data,ibdfilenames=NULL,snp.names.mat,ibd.loci=NULL,joint.tests=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,pairweights=calcule.poids.alphafixe,lc=NULL,alpha=NULL)
 {
 ###################### Définition des arguments #####################################################################################
 # pedfilenames : vecteur des noms de fichiers ped (un fichier par locus).  Les sujets inclus peuvent être un sous-ensemble de ceux 
@@ -49,7 +49,7 @@ if(is.null(ibd.loci)|is.null(ibdfilenames)) cat("\n","Warning: Either the argume
 ped.x.all=read.merlin.files(pedfilenames,datfilenames,freq.data,ibdfilenames)
 
 # exécution des tests pour les SNPs ou paires de SNPs
-tests.loop=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci,contingency.file,design.constraint,par.constrained,constraints,calcule.poids=calcule.poids,lc=lc,alpha=alpha)
+tests.loop=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci,contingency.file,design.constraint,par.constrained,constraints,pairweights=calcule.poids,lc=lc,alpha=alpha)
 
 # calcul des scores et valeur-p des différents tests pour tous les SNPs testés
 p.values.scores=get.scores.pvalues(tests.loop,joint.tests)
