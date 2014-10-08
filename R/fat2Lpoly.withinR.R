@@ -15,7 +15,7 @@
 
 # 4 avril 2013: ajout du calcul des coefficients de kinship (a priori) au lieu des IBD, dans le cas où cette dernière information n'est pas fournie.
 
-fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,lc=NULL,alpha=NULL)
+fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,calcule.poids=calcule.poids.alphafixe,lc=NULL,alpha=NULL)
 {
 ped=ped.x.all$ped
 x.all=ped.x.all$x.all
@@ -268,7 +268,7 @@ ind.par = tmp2$ind.par
 ind.catl = rep(1:(n.levels-1),lapply(unique(ind.par),length))
 ind.cat = rep(1:(n.levels-1),rep.par)
 
-res[[s]]=scores.covs(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,lc=lc,alpha.vec=alpha)
+res[[s]]=scores.covs(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,calcule.poids=calcule.poids,lc=lc,alpha.vec=alpha)
 }
 
 list(scores.covs.all.SNPs=res,snp.names.mat=snp.names.mat)
