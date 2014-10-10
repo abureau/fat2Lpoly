@@ -1,2 +1,2 @@
 import(multgee,kinship2)
-export(design.1locus,design.dichotomous,design.endo2disease,design.full,fat2Lpoly,fat2Lpoly.withinR,get.scores.pvalues,read.merlin.files)
+export(design.1locus,design.dichotomous,design.endo2disease,design.full,fat2Lpoly,fat2Lpoly.withinR,get.scores.pvalues,read.merlin.files,calcule.poids.Chen,calcule.poids.alphafixe)
