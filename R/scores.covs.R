@@ -86,7 +86,7 @@
 
 # modifié par Jordie le 22 août pour enlever des arguments superflus.
 
-scores.covs=function(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,calcule.poids=calcule.poids.alphafixe,lc=NULL,alpha.vec=rep(0,n.levels-1))
+scores.covs=function(subject.ids,fam.id,y,n.levels,ibd.dat,n.loc,xp,xp.loc,xl,il,xibd.loc,ind.par,rep.par,ind.catl,ind.cat,contingency.file,descrip.file,calculpoids=calcule.poids.alphafixe,lc=NULL,alpha.vec=rep(0,n.levels-1))
 {
 ###################### Définition des arguments #####################################################################################
 # subject.ids: vecteur des id de chaque sujet
@@ -172,7 +172,7 @@ for(i in 1:nb.fam)
       if (length(alpha.vec)!=dim(xl)[3]) stop("The number of alpha coefficients for the computation of weights does not equal the 3rd dimension of xl (",dim(xl)[3],")")
       # Calcul des poids pour la famille
       # On suppose que la matrice de design pour le niveau 1 contient le locus lc
-      w = calcule.poids(array(xl[indices.y,,],c(ni,dim(xl)[2],dim(xl)[3])),y[indices.y],ind.par,rep.par,alpha.vec,lc,klc=1)      
+      w = calculpoids(array(xl[indices.y,,],c(ni,dim(xl)[2],dim(xl)[3])),y[indices.y],ind.par,rep.par,alpha.vec,lc,klc=1)      
       ibd.terms.mat[i,,,]=ibd.terms.w(y[indices.y],subject.ids[indices.y],l1[indices.ibd],l2[indices.ibd],array(pim[indices.ibd,],c(sum(indices.ibd),ncol(pim))),w)
       scores.mat[i,]=score.poly.w(array(xp[indices.y,,],c(ni,dim(xp)[2],dim(xp)[3])),y[indices.y],w)      
       }
