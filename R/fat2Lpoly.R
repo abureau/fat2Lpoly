@@ -49,12 +49,10 @@ if(is.null(ibd.loci)|is.null(ibdfilenames)) cat("\n","Warning: Either the argume
 ped.x.all=read.merlin.files(pedfilenames,datfilenames,freq.data,ibdfilenames)
 
 # exécution des tests pour les SNPs ou paires de SNPs
-tests.loop=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci,contingency.file,design.constraint,par.constrained,constraints,pairweights=calcule.poids,lc=lc,alpha=alpha)
+tests.loop=fat2Lpoly.withinR(ped.x.all,snp.names.mat,ibd.loci,contingency.file,design.constraint,par.constrained,constraints,pairweights=pairweights,lc=lc,alpha=alpha)
 
 # calcul des scores et valeur-p des différents tests pour tous les SNPs testés
 p.values.scores=get.scores.pvalues(tests.loop,joint.tests)
-
-cat("It was a pleasure working for you !\n")
 
 return(list(scores.covs.all.SNPs=tests.loop$scores.covs.all.SNPs,p.values.scores=p.values.scores,MA.table=ped.x.all$MA.table,y1=ped.x.all$y1.name,y2=ped.x.all$y2.name))
 }
