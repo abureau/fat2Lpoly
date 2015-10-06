@@ -54,7 +54,14 @@ if(is.null(ibd.loci)|is.null(ibd.dat.list[[1]]))
 	  sujet.tmp=ped.tmp[,2]
 	  pere.tmp=pere[indices]
 	  mere.tmp=mere[indices]
-
+      
+	  # pour que le calcul de kinship soit valide, il faut que la structure de famille soit complète:
+	  # par conséquent, on exige que chaque sujet satisfasse une des 2 conditions suivantes:
+	  # 1- parent d'un autre sujet présent dans la même famille ou
+	  # 2- enfant de 2 parents inclus (les 2) dans la famille.
+	  if(!all(sujet.tmp%in%pere.tmp|sujet.tmp%in%mere.tmp|(pere.tmp%in%sujet.tmp&mere.tmp%in%sujet.tmp))) 
+	  stop(paste("When IBD is not provided, pedigree structures must be complete. Family",fam.u[j],"is not complete."))
+	  
       matk<-2*kinship(sujet.tmp,pere.tmp,mere.tmp)
 	
       pi.tmp=as.numeric(matk[lower.tri(matk)])
