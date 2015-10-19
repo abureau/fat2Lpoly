@@ -1,5 +1,5 @@
 
-# correspond au fichier fonction_scores_covs_v2.R (fonction utilitaire à la fin de ce fichier) dans le dossier "programmes"
+# correspond au fichier fonction_scores_covs_v2.R (fonction utilitaire a la fin de ce fichier) dans le dossier "programmes"
 
 converti.terme = function(vec,n.loc)
 {

@@ -1,19 +1,19 @@
 
 # Jordie Croteau
-# 23 août 2012
+# 23 aout 2012
 
 # correspond au fichier fonction_fat2Lpoly.withinR_v2.R dans le dossier "programmes"
 
 
-# cette fonction est identique à l'ancienne version de fat2Lpoly (fichier fonction_globale_donnees_SPAP_v2.R), excepté qu'au lieu d'appeler 
+# cette fonction est identique a l'ancienne version de fat2Lpoly (fichier fonction_globale_donnees_SPAP_v2.R), excepte qu'au lieu d'appeler 
 # read.merlin.files, fat2Lpoly.withinR prend comme argument un objet dont le format est celui de la sortie de la fonction read.merlin.files.
-# De plus, fat2Lpoly.withinR s'arrête juste avant l'appel de get.scores.pvalues dans l'ancienne version de fat2Lpoly.
+# De plus, fat2Lpoly.withinR s'arrete juste avant l'appel de get.scores.pvalues dans l'ancienne version de fat2Lpoly.
 
-# petites modifs apportées le 28 août 2012 par Jordie.
+# petites modifs apportees le 28 aout 2012 par Jordie.
 
-# ajout de code enlevant les familles n'ayant pas plus d'une catégorie représentée, le 17 octobre 2012
+# ajout de code enlevant les familles n'ayant pas plus d'une categorie representee, le 17 octobre 2012
 
-# 4 avril 2013: ajout du calcul des coefficients de kinship (a priori) au lieu des IBD, dans le cas où cette dernière information n'est pas fournie.
+# 4 avril 2013: ajout du calcul des coefficients de kinship (a priori) au lieu des IBD, dans le cas ou cette derniere information n'est pas fournie.
 
 fat2Lpoly.withinR=function(ped.x.all,snp.names.mat,ibd.loci=NULL,contingency.file=FALSE,design.constraint,par.constrained,constraints,pairweights=calcule.poids.alphafixe,lc=NULL,alpha=NULL)
 {
@@ -34,8 +34,8 @@ if(contingency.file)
   cat("some descriptive statistics will progressively be added to the file ",descrip.file,"\n\n")
  }
   
-# si les IBD ne sont pas fournies, on calcule le kinship a priori de toutes les paires de sujets à l'intérieur de chaque famille
-# et on met le tout dans le même format que pour les IBD a posteriori.
+# si les IBD ne sont pas fournies, on calcule le kinship a priori de toutes les paires de sujets a l'interieur de chaque famille
+# et on met le tout dans le meme format que pour les IBD a posteriori.
 if(is.null(ibd.loci)|is.null(ibd.dat.list[[1]]))
  {
   pere=ped.x.all$pere
@@ -54,14 +54,7 @@ if(is.null(ibd.loci)|is.null(ibd.dat.list[[1]]))
 	  sujet.tmp=ped.tmp[,2]
 	  pere.tmp=pere[indices]
 	  mere.tmp=mere[indices]
-      
-	  # pour que le calcul de kinship soit valide, il faut que la structure de famille soit complète:
-	  # par conséquent, on exige que chaque sujet satisfasse une des 2 conditions suivantes:
-	  # 1- parent d'un autre sujet présent dans la même famille ou
-	  # 2- enfant de 2 parents inclus (les 2) dans la famille.
-	  if(!all(sujet.tmp%in%pere.tmp|sujet.tmp%in%mere.tmp|(pere.tmp%in%sujet.tmp&mere.tmp%in%sujet.tmp))) 
-	  stop(paste("When IBD is not provided, pedigree structures must be complete. Family",fam.u[j],"is not complete."))
-	  
+
       matk<-2*kinship(sujet.tmp,pere.tmp,mere.tmp)
 	
       pi.tmp=as.numeric(matk[lower.tri(matk)])
@@ -83,7 +76,7 @@ if(is.null(ibd.loci)|is.null(ibd.dat.list[[1]]))
   colnames(ibd.dat)[1:3]=c("FAMILY","ID1","ID2")
  }   
   
-# Boucle principale sur les marqueurs testés commence ici
+# Boucle principale sur les marqueurs testes commence ici
 for(s in 1:nrow(snp.names.mat)){
 
 snp.names=snp.names.mat[s,]
@@ -131,11 +124,11 @@ if(!is.null(ibd.loci)&!is.null(ibd.dat.list[[1]]))
 # pour le moment on suppose que snp.names.mat a une ou 2 colonnes (il y a un ou 2 locus)
 ifelse(ncol(snp.names.mat)==1,x <- as.matrix(x.all[,c.names==snp.names]),x <- x.all[,c(which(c.names==snp.names[1]),which(c.names==snp.names[2]))])
 
-# extraire n.levels de design.constraint à l'aide d'un x bidon.
+# extraire n.levels de design.constraint a l'aide d'un x bidon.
 n.levels=attributes(design.constraint(array(1,c(2,ncol(x))),par.constrained=par.constrained,constraints=constraints))$n.levels
 
 if(n.levels==4){
-# enlever les sujets pour lesquels soit y1 est manquant, ou y2 est manquant, ou un des génotypes des différents locus est manquant.
+# enlever les sujets pour lesquels soit y1 est manquant, ou y2 est manquant, ou un des genotypes des differents locus est manquant.
 ped.filtre=ped[ped$y1!=0&ped$y2!=0&!apply(is.na(x),1,any),]
 fam.id=ped.filtre[,1]
 subject.ids=ped.filtre[,2]
@@ -144,7 +137,7 @@ y2=ped.filtre$y2
 dims=c(sum(ped$y1!=0&ped$y2!=0&!apply(is.na(x),1,any)),ncol(x))
 x=array(x[ped$y1!=0&ped$y2!=0&!apply(is.na(x),1,any),],dims)
 
-# création du vecteur de réponse polytomique à partir de y1 et y2 
+# creation du vecteur de reponse polytomique a partir de y1 et y2 
 y=rep(NA,length(y1))
 y[y1==1&y2==1]=4
 y[y1==1&y2==2]=2
@@ -152,7 +145,7 @@ y[y1==2&y2==1]=1
 y[y1==2&y2==2]=3
 y=factor(y,levels=1:n.levels)
 
-# enlever les familles n'ayant pas plus d'une catégorie représentée et émettre un avertissement s'il y a lieu.
+# enlever les familles n'ayant pas plus d'une categorie representee et emettre un avertissement s'il y a lieu.
 nb.cat.par.fam=tapply(y,fam.id,function(x) length(unique(x)))
 if(any(nb.cat.par.fam<=1))
  {
@@ -184,7 +177,7 @@ if(any(as.numeric(table(y))==0)){
  stop(paste("There is no subject with level",categ,"in any of the families (each level must be represented in at least one family)"))
  }
  
-# JC, 9 juillet 2013: s'il y a 2 locus, estimer les alphas par régression polytomique GEE de y sur X du locus lc.
+# JC, 9 juillet 2013: s'il y a 2 locus, estimer les alphas par regression polytomique GEE de y sur X du locus lc.
 if(!is.null(alpha)&is.null(lc)) stop("If alpha is not null, locus number on which to condition must be given")
 
 if(ncol(x)==2&!is.null(lc)&is.null(alpha))
@@ -202,7 +195,7 @@ else if(n.levels==2){
 cat("Analysis with only one dichotomous phenotype","\n")
 cat("Phenotype used is",ped.x.all$y1.name,"\n")
 
-# enlever les sujets pour lesquels soit le phénotype est manquant ou un des génotypes des différents locus est manquant.
+# enlever les sujets pour lesquels soit le phenotype est manquant ou un des genotypes des differents locus est manquant.
 ped.filtre=ped[ped$y1!=0&!apply(is.na(x),1,any),]
 fam.id=ped.filtre[,1]
 subject.ids=ped.filtre[,2]
@@ -210,7 +203,7 @@ y=factor(3-ped.filtre$y1,levels=1:n.levels)
 dims=c(sum(ped$y1!=0&!apply(is.na(x),1,any)),ncol(x))
 x=array(x[ped$y1!=0&!apply(is.na(x),1,any),],dims)
 
-# enlever les familles n'ayant pas plus d'une catégorie représentée et émettre un avertissement s'il y a lieu.
+# enlever les familles n'ayant pas plus d'une categorie representee et emettre un avertissement s'il y a lieu.
 nb.cat.par.fam=tapply(y,fam.id,function(x) length(unique(x)))
 if(any(nb.cat.par.fam<=1))
  {
@@ -233,7 +226,7 @@ if(contingency.file)
   cat("\n",file=descrip.file,append=TRUE)
  }
  
- # JC, 11 juillet 2013: s'il y a 2 locus, estimer alpha par régression logistique de y sur X du locus lc.
+ # JC, 11 juillet 2013: s'il y a 2 locus, estimer alpha par regression logistique de y sur X du locus lc.
 if(!is.null(alpha)&is.null(lc)) stop("If alpha is not null, locus number on which to condition must be given")
 
 if(ncol(x)==2&!is.null(lc)&is.null(alpha))
@@ -247,31 +240,31 @@ if(ncol(x)==2&!is.null(lc)&is.null(alpha))
 }
 else stop("attribute n.levels of the design.constraint function must be 2 or 4")
 
-# création des matrices individuelles pour chaque catégorie k de 1 à K-1 à partir de la matrice des "0,0.5,1" à l'aide d'une fonction spécifique
+# creation des matrices individuelles pour chaque categorie k de 1 a K-1 a partir de la matrice des "0,0.5,1" a l'aide d'une fonction specifique
 tmp <- design.constraint(x,par.constrained=par.constrained,constraints=constraints)
 
-# création de la matrice de design xp pour le calcul du score 
+# creation de la matrice de design xp pour le calcul du score 
 tmp2=design.polytomous(x=tmp$x.e,K=n.levels,x.loc.in=tmp$x.loc.e,par.constrained=par.constrained,constraints=constraints)
 xp = tmp2$xp
-# Liste du vecteur de locus impliqués dans chaque paramètre
+# Liste du vecteur de locus impliques dans chaque parametre
 xp.loc = tmp2$x.loc.out
 
-# Création de la matrice de design xl pour le calcul des covariances (On prend par.constrainted et constraints ressortis par design.constraint)
-# rep.par est le vecteur du nombre de paramètres dans chaque matrice x
+# Creation de la matrice de design xl pour le calcul des covariances (On prend par.constrainted et constraints ressortis par design.constraint)
+# rep.par est le vecteur du nombre de parametres dans chaque matrice x
 rep.par <- unlist(lapply(tmp$x.e,ncol))
 if (missing(constraints)) tmp2=design.polytomous(x=tmp$x.l,K=n.levels,x.loc.in=tmp$x.loc.l,rep.par=rep.par)
 else tmp2=design.polytomous(x=tmp$x.l,K=n.levels,x.loc.in=tmp$x.loc.l,par.constrained=tmp$par.constrained,constraints=tmp$constraints,rep.par=rep.par)
 xl = tmp2$xp
-# à partir de version 15, xl.loc est caractère au lieu de numérique
+# a partir de version 15, xl.loc est caractere au lieu de numerique
 xl.loc = unlist(tmp2$x.loc.out)
 # Conversion des termes de produits en indices 
 il <- strsplit(xl.loc,split="")
 xibd.loc= sapply(il,converti.terme,n.loc=n.loc)
 
-# ind.par nous donne les indices des locus pour la catégorie à laquelle chaque terme appartient
+# ind.par nous donne les indices des locus pour la categorie a laquelle chaque terme appartient
 ind.par = tmp2$ind.par
-# ind.cat nous donne la catégorie à laquelle appartient chaque paramètre
-# et ind.catl la catégorie à laquelle appartient chaque terme
+# ind.cat nous donne la categorie a laquelle appartient chaque parametre
+# et ind.catl la categorie a laquelle appartient chaque terme
 ind.catl = rep(1:(n.levels-1),lapply(unique(ind.par),length))
 ind.cat = rep(1:(n.levels-1),rep.par)
 

@@ -1,7 +1,7 @@
-# Fonction pour convertir un data frame contenant les génotypes (paires d'allèles) de multiples sujets (lignes) et SNPs (paires de colonnes)
-# en un autre data frame contenant, dans le cas allelic, les (nombres d'allèles mineurs)/2 (valeurs 0, 0.5 ou 1; une colonne par SNP);
-# dans le cas dominant, la valeur 1 si le génotype est constitué d'au moins un allèle mineur, 0 sinon;
-# dans le cas récessif, la valeur 1 si le génotype est constitué de 2 allèles mineurs, 0 sinon.
+# Fonction pour convertir un data frame contenant les genotypes (paires d'alleles) de multiples sujets (lignes) et SNPs (paires de colonnes)
+# en un autre data frame contenant, dans le cas allelic, les (nombres d'alleles mineurs)/2 (valeurs 0, 0.5 ou 1; une colonne par SNP);
+# dans le cas dominant, la valeur 1 si le genotype est constitue d'au moins un allele mineur, 0 sinon;
+# dans le cas recessif, la valeur 1 si le genotype est constitue de 2 alleles mineurs, 0 sinon.
 
 # correspond au fichier alleles2sums_v2.R dans le dossier "programmes"
 
@@ -10,10 +10,10 @@
 
 alleles2sums=function(geno.table,MA.vec,snp.names,mode="allelic")
 {
-# geno.table : data frame des génotypes (2 colonnes par SNP) 
-# MA.vec :     vecteur des allèles mineurs
+# geno.table : data frame des genotypes (2 colonnes par SNP) 
+# MA.vec :     vecteur des alleles mineurs
 # snp.names :  vecteur des noms de SNPs
-# mode :       mode de transmission ("allelic" (défaut), "recessive" ou "dominant")
+# mode :       mode de transmission ("allelic" (defaut), "recessive" ou "dominant")
 
 num.snps=ncol(geno.table)/2
 geno.table[geno.table==0]=NA 

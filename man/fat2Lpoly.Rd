@@ -125,7 +125,7 @@ test=fat2Lpoly(pedfilenames=paste(path.data,c("loc1.ped","loc2.ped"),sep=""),
 		       design.constraint=design.endo2disease,lc=1)
 
 test$p.values.scores
-}
+}		   
 ###############################################################################
 
 ################### design.endo2disease without conditioning ##################

@@ -1,31 +1,31 @@
 
 # Jordie Croteau
-# 17 août 2012
+# 17 aout 2012
 
 # correspond au fichier read_merlin_files_v3.R dans le dossier "programmes"
 
-# modifié le 21 août pour avoir la possibilité de prendre comme argument des vecteurs d'allèles mineures au lieu de fichiers de fréquences d'allèles.
+# modifie le 21 aout pour avoir la possibilite de prendre comme argument des vecteurs d'alleles mineures au lieu de fichiers de frequences d'alleles.
 
-# modifié le 23 août pour intégrer la lecture des données d'IBD.
+# modifie le 23 aout pour integrer la lecture des donnees d'IBD.
 
-# 4 avril 2013: valeur NULL par défaut ajoutée pour l'argument ibdfilenames (dans ce cas, aucune lecture des données d'IBD)
+# 4 avril 2013: valeur NULL par defaut ajoutee pour l'argument ibdfilenames (dans ce cas, aucune lecture des donnees d'IBD)
 
 read.merlin.files=function(pedfilenames,datfilenames,freq.data,ibdfilenames=NULL)
 {
-###################### Définition des arguments #####################################################################################
-# pedfilenames : vecteur des noms de fichiers ped (un fichier par locus).  Les sujets inclus peuvent être un sous-ensemble de ceux 
+###################### Definition des arguments #####################################################################################
+# pedfilenames : vecteur des noms de fichiers ped (un fichier par locus).  Les sujets inclus peuvent etre un sous-ensemble de ceux 
 #                inclus dans les fichiers d'IDB.
 # datfilenames : vecteur des noms de fichiers dat (un fichier par locus). 
 # freqfilenames: vecteur des noms de fichiers freq (un fichier par locus). 
 # ibdfilenames: 
-# Tous ces fichiers doivent être en format Merlin (voir http://www.sph.umich.edu/csg/abecasis/Merlin/tour/input_files.html pour la description détaillée de ce format)
+# Tous ces fichiers doivent etre en format Merlin (voir http://www.sph.umich.edu/csg/abecasis/Merlin/tour/input_files.html pour la description detaillee de ce format)
 #####################################################################################################################################
 
-############### lecture des fichiers datfile pour obtenir les noms de SNPs et de phénotype #######################
+############### lecture des fichiers datfile pour obtenir les noms de SNPs et de phenotype #######################
 dat1=read.table(datfilenames[1],as.is=TRUE)
 if(dat1[1,1]!="A") stop(paste("The first line of",datfilenames[1],"should be starting by 'A'."))
 
-# si 2 noms d'affection status sont fournis, on suppose que le 1er est l'endophénotype et le 2e, le phénotype.
+# si 2 noms d'affection status sont fournis, on suppose que le 1er est l'endophenotype et le 2e, le phenotype.
 if(sum(dat1[,1]=="A")==2){ 
 nb.pheno=2
 pheno.name=dat1[2,2]
@@ -36,7 +36,7 @@ cat("Y2 data extracted from input files:   ",pheno.name,"\n")
 cat("\n")
 if(!all(dat1[3:nrow(dat1),1]=="M")) stop(paste("Lines number 3 to",nrow(dat1),"of",datfilenames[1],"should all be starting by 'M'."))
 }
-# si seulement 1 nom d'affection status est fourni, on met pheno.name=NULL et on travaille avec endo.name (bien que ce dernier puisse représenter un phenotype (pas endo))
+# si seulement 1 nom d'affection status est fourni, on met pheno.name=NULL et on travaille avec endo.name (bien que ce dernier puisse representer un phenotype (pas endo))
 else{
 nb.pheno=1
 endo.name=dat1[1,2]
@@ -64,7 +64,7 @@ if(n.loc>1)
 ################################################################################################################################
 
 
-# extraction des fam.id, subject.ids, y1 et y2, à partir du premier fichier ped.
+# extraction des fam.id, subject.ids, y1 et y2, a partir du premier fichier ped.
 ped1.tmp=read.table(pedfilenames[1],header=FALSE,as.is=TRUE)
 if(any(apply(ped1.tmp,2,is.character))) stop(paste(pedfilenames[1],"contains letters in some fields.  All fields must be numeric."))
 fam.id=ped1.tmp[,1]
@@ -80,7 +80,7 @@ y1=ped1.tmp[,6]
 y1[is.na(y1)]=0
 }
 
-################ extraction des génotypes de tous les locus #####################################
+################ extraction des genotypes de tous les locus #####################################
 if(!is.null(pheno.name)) ped=data.frame(fam.id,subject.ids,ped1.tmp[,3:4],y1,y2,ped1.tmp[,8:ncol(ped1.tmp)])
 else ped=data.frame(fam.id,subject.ids,ped1.tmp[,3:4],y1,ped1.tmp[,7:ncol(ped1.tmp)])
 
@@ -102,14 +102,14 @@ if(nrow(ped)<nrow(ped1.tmp)) warning(paste("Subjects from 1 or more ped files di
 ##################################################################################################
  
 
-################################################ obtention des allèles mineures ##########################################################
+################################################ obtention des alleles mineures ##########################################################
 if(is.list(freq.data)) MA=unlist(freq.data)
 else
 { 
-######################### lecture des fichiers freq pour obtenir les allèles mineures  ###########################################
+######################### lecture des fichiers freq pour obtenir les alleles mineures  ###########################################
 
-# il y a 2 formats de fichiers freq possibles dans merlin (avec fréquences d'allèles une sous l'autre ou une à côté de l'autre).
-# Donc, pour chaque fichier freq, il faut d'abord détecter quel est le format.
+# il y a 2 formats de fichiers freq possibles dans merlin (avec frequences d'alleles une sous l'autre ou une a cote de l'autre).
+# Donc, pour chaque fichier freq, il faut d'abord detecter quel est le format.
 freq=readLines(freq.data[1])
 n.lines=length(freq)
 greps.M=grep("M",freq)
@@ -130,9 +130,9 @@ if(format.freq==0)
  
 if(format.freq==1) freqs=lapply(strsplit(freq[-greps.M],split=" "),function(x){ x=as.numeric(x); return(x[!is.na(x)])})
 
-# allèles mineures
+# alleles mineures
 MA=unlist(lapply(freqs,function(x) {y=x[x>0]; ifelse(length(y)==2,which(x==min(y)),NA)}))
-# allèles majeures
+# alleles majeures
 MjA=unlist(lapply(freqs,which.max))
 
 if(n.loc>1)
@@ -161,9 +161,9 @@ if(n.loc>1)
  
     if(format.freq==1) freqs=lapply(strsplit(freq[-greps.M],split=" "),function(x){ x=as.numeric(x); return(x[!is.na(x)])})
 	
-	# allèles mineures
+	# alleles mineures
     MA=c(MA,unlist(lapply(freqs,function(x) {y=x[x>0]; ifelse(length(y)==2,which(x==min(y)),NA)})))
-    # allèles majeures
+    # alleles majeures
     MjA=c(MjA,unlist(lapply(freqs,which.max)))
    }
  }
@@ -171,8 +171,8 @@ if(any(is.na(MA))) stop("one or more SNP(s) with unknown minor allele, probably 
  
 if(!all(snp.names.freq==snp.names.dat)) stop("SNP names or order in freq files not the same as in the data files")
 
-# vérifier que toutes les colonnes de génotypes ne contiennent pas d'autres allèles que les allèles mineures et majeures obtenues 
-# à partir des fichiers freq.
+# verifier que toutes les colonnes de genotypes ne contiennent pas d'autres alleles que les alleles mineures et majeures obtenues 
+# a partir des fichiers freq.
 for(j in 1:length(MA))
  {
   genos.tmp=as.vector(ped[,c(1+nb.pheno+2*j,2+nb.pheno+2*j)])
@@ -185,7 +185,7 @@ for(j in 1:length(MA))
 ################################################################################################################################
 }
 
-# conversion des génotypes en valeurs 0,0.5,1 (mode="allelic")
+# conversion des genotypes en valeurs 0,0.5,1 (mode="allelic")
 x.all=alleles2sums(ped[,(3+nb.pheno):ncol(ped)],MA.vec=MA,snp.names=snp.names.dat,mode="allelic")
 
 MA.table=data.frame(snp.names.dat,MA)

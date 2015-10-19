@@ -1,22 +1,22 @@
 
-# fonction qui prend comme argument le résultat de la fonction scores.covs.multiSNP et retourne un tableau des valeur-p 
-# (et scores des tests individuels) des différents tests pour tous les SNPs testés.  
+# fonction qui prend comme argument le resultat de la fonction scores.covs.multiSNP et retourne un tableau des valeur-p 
+# (et scores des tests individuels) des differents tests pour tous les SNPs testes.  
 
 # Jordie Croteau
-# 16 août 2012
+# 16 aout 2012
 
 # correspond au fichier get_scores_and_p-values_function_v3.R dans le dossier "programmes"
 
-# modifié le 27 août
+# modifie le 27 aout
 
-# correction apportée le 18 mars pour que ça fonctionne même dans le cas d'un seul SNP testé.
+# correction apportee le 18 mars pour que ca fonctionne meme dans le cas d'un seul SNP teste.
 
 get.scores.pvalues=function(test,joint.tests){
 
 snp.names.mat=test$snp.names.mat
 test=test$scores.covs.all.SNPs
 
-# mettre les indices en ordre croissant au cas où ça n'aurait pas été fourni dans cet ordre.
+# mettre les indices en ordre croissant au cas ou ca n'aurait pas ete fourni dans cet ordre.
 if(!is.null(joint.tests)) joint.tests=lapply(joint.tests,function(x) x[order(x)])
 
 # tableau des scores des tests individuels
