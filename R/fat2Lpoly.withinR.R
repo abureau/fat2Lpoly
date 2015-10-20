@@ -55,6 +55,13 @@ if(is.null(ibd.loci)|is.null(ibd.dat.list[[1]]))
 	  pere.tmp=pere[indices]
 	  mere.tmp=mere[indices]
 
+	  # pour que le calcul de kinship soit valide, il faut que la structure de famille soit complete:
+	  # par consequent, on exige que chaque sujet satisfasse une des 2 conditions suivantes:
+	  # 1- parent d'un autre sujet present dans la meme famille ou
+	  # 2- enfant de 2 parents inclus dans la famille (les 2).
+	  if(!all(sujet.tmp%in%pere.tmp|sujet.tmp%in%mere.tmp|(pere.tmp%in%sujet.tmp&mere.tmp%in%sujet.tmp))) 
+	  stop(paste("When IBD is not provided, pedigree structures must be complete. Family",fam.u[j],"is not complete."))
+	  
       matk<-2*kinship(sujet.tmp,pere.tmp,mere.tmp)
 	
       pi.tmp=as.numeric(matk[lower.tri(matk)])
@@ -80,8 +87,6 @@ if(is.null(ibd.loci)|is.null(ibd.dat.list[[1]]))
 for(s in 1:nrow(snp.names.mat)){
 
 snp.names=snp.names.mat[s,]
-#if(s==(nrow(snp.names.mat)-1)) cat("Only two analyses left !\n")
-#if(s==nrow(snp.names.mat)) cat("Only one analysis left !\n")
 
 if(length(snp.names)==1) cat(paste("analyzing SNP",snp.names,"\n"))
 if(length(snp.names)==2) cat(paste("analyzing SNP pair",paste(snp.names,collapse=" ")),"\n")

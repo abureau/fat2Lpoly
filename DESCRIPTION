@@ -1,8 +1,8 @@
 Package: fat2Lpoly
 Type: Package
 Title: TWO-LOCUS FAMILY-BASED ASSOCIATION TEST with POLYTOMIC OUTCOME
-Version: 1.2
-Date: 2015-10-19
+Version: 1.2.1
+Date: 2015-10-20
 Author: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca> and Jordie Croteau
         <jordie.croteau@crulrg.ulaval.ca>
 Maintainer: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca>
