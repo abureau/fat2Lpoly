@@ -1,10 +1,10 @@
 Package: fat2Lpoly
 Type: Package
 Title: Two-Locus Family-Based Association Test with Polytomic Outcome
-Version: 1.2.2
-Date: 2015-10-20
+Version: 1.2.3
+Date: 2018-05-17
 Author: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca> and Jordie Croteau
-        <jordie.croteau@crulrg.ulaval.ca>
+        <jorcroteau@gmail.com>
 Maintainer: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca>
 Depends: R (>= 3.2)
 Imports: kinship2, multgee
