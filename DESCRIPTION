@@ -1,6 +1,6 @@
 Package: fat2Lpoly
 Type: Package
-Title: Two-Locus Family-Based Association Test with Polytomic Outcome
+Title: Two-Locus Family-Based Association Test with Polytomous Outcome
 Version: 1.2.3
 Date: 2018-05-17
 Author: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca> and Jordie Croteau
