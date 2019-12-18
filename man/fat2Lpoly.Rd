@@ -137,7 +137,7 @@ test=fat2Lpoly(pedfilenames=paste(path.data,c("loc1.ped","loc2.ped"),sep=""),
 			   freq.data=paste(path.data,c("loc1.freq","loc2.freq"),sep=""),
                ibdfilenames=paste(path.data,c("loc1.ibd","loc2.ibd"),sep=""),
 		       snp.names.mat=snp.names.mat,ibd.loci=microsat.names.mat,
-		       joint.tests=joint.tests,contingency.file=TRUE,
+		       joint.tests=joint.tests,contingency.file=FALSE,
 		       design.constraint=design.endo2disease)
 
 test$p.values.scores   

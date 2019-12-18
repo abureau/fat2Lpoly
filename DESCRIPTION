@@ -1,8 +1,8 @@
 Package: fat2Lpoly
 Type: Package
 Title: Two-Locus Family-Based Association Test with Polytomous Outcome
-Version: 1.2.3
-Date: 2018-05-17
+Version: 1.2.4
+Date: 2019-12-17
 Author: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca> and Jordie Croteau
         <jorcroteau@gmail.com>
 Maintainer: Alexandre BUREAU <alexandre.bureau@msp.ulaval.ca>
@@ -12,4 +12,4 @@ Description: Performs family-based association tests with a polytomous outcome u
              defined by some design matrix.  
 License: GPL
 LazyLoad: yes
-URL: http://www.crulrg.ulaval.ca/pages_perso_chercheurs/bureau_a/
+URL: https://www.cervo.ulaval.ca/pages_perso_chercheurs/bureau_a/
