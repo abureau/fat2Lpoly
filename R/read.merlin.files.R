@@ -175,7 +175,7 @@ if(!all(snp.names.freq==snp.names.dat)) stop("SNP names or order in freq files n
 # a partir des fichiers freq.
 for(j in 1:length(MA))
  {
-  genos.tmp=as.vector(ped[,c(1+nb.pheno+2*j,2+nb.pheno+2*j)])
+  genos.tmp=c(ped[,1+nb.pheno+2*j],ped[,2+nb.pheno+2*j])
   if(!all(is.na(genos.tmp)|genos.tmp==0))
    {
     genos.tmp=genos.tmp[!(is.na(genos.tmp)|genos.tmp==0)]
